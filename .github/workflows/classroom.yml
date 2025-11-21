@@ -1,0 +1,25 @@
+name: Autograding Tests
+on: [push]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install pytest pytest-json-report
+
+      - name: Run pytest and generate JSON report
+        run: pytest --json-report --json-report-file=report.json
+
+      - name: Upload JSON test report for GitHub Classroom
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: report.json
